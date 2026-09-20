@@ -69,5 +69,11 @@ git checkout develop
 git pull
 git merge --no-ff feature/project-initialization
 git push origin develop
+
 ```
->>>>>>> Stashed changes
+
+Быстрое слияние
+
+```bash
+git merge --no-ff feature/project-initialization -m "Merge branch 'feature/project-initialization' into develop"
+```>>>>>>> Stashed changes

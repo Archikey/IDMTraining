@@ -1,2 +1,58 @@
 # Учебный проект по IDM
 
+## Команды для инициализации проекта
+
+### Создание файлов
+```
+dotnet new sln -n IdmTraining
+
+mkdir src
+mkdir tests
+mkdir database
+mkdir scripts
+mkdir deploy
+
+dotnet new webapi -n Idm.Api -o src/Idm.Api
+dotnet new classlib -n Idm.Domain -o src/Idm.Domain
+dotnet new classlib -n Idm.Application -o src/Idm.Application
+dotnet new classlib -n Idm.Infrastructure -o src/Idm.Infrastructure
+dotnet new worker -n Idm.Worker -o src/Idm.Worker
+```
+
+### Добавление в решение
+
+```
+dotnet sln add src/Idm.Api/Idm.Api.csproj
+dotnet sln add src/Idm.Domain/Idm.Domain.csproj
+dotnet sln add src/Idm.Application/Idm.Application.csproj
+dotnet sln add src/Idm.Infrastructure/Idm.Infrastructure.csproj
+dotnet sln add src/Idm.Worker/Idm.Worker.csproj
+```
+
+### Команда на добавление ссылок на проект
+
+Через CLI:
+
+```bash
+dotnet add <проект> reference <проект-на-который-ссылаемся>
+```
+
+Например, чтобы `Idm.Application` зависел от `Idm.Domain`:
+
+```bash
+dotnet add src/Idm.Application/Idm.Application.csproj reference src/Idm.Domain/Idm.Domain.csproj
+```
+
+Проверить ссылки конкретного проекта:
+
+```bash
+dotnet list src/Idm.Application/Idm.Application.csproj reference
+```
+
+
+### Сборка проекта
+
+```bash
+dotnet restore
+dotnet build
+```

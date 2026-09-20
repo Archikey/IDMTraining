@@ -1,0 +1,62 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains
+.idea/
+*.sln.iml
+
+# Node / React
+**/node_modules/
+**/dist/
+**/.vite/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# Logs
+*.log
+logs/
+
+# Test results
+TestResults/
+coverage/
+coverage.*
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Docker / Podman local data
+docker-data/
+podman-data/
+
+# PostgreSQL local data
+postgres-data/
+
+# Temporary
+*.tmp
+*.temp
+*.bak

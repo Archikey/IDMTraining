@@ -56,3 +56,18 @@ dotnet list src/Idm.Application/Idm.Application.csproj reference
 dotnet restore
 dotnet build
 ```
+<<<<<<< Updated upstream
+=======
+
+
+## Merge branch
+
+Теперь закрываем feature через GitFlow:
+
+```bash
+git checkout develop
+git pull
+git merge --no-ff feature/project-initialization
+git push origin develop
+```
+>>>>>>> Stashed changes

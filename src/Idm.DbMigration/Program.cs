@@ -65,3 +65,10 @@ Console.WriteLine($"Kind: {now.Kind}");
 await addedSystem.UpdateSystemTimeAsync(connection, 1, now);
 await addedSystem.SearchSystemByIdAsync(connection, 1);
 
+
+Console.WriteLine("\n\nUpdating system status to inactive for system ID 1 and 9999...\n\n");
+
+await addedSystem.UpdateSystemStatusAsync(connection, 1, false);
+await addedSystem.UpdateSystemStatusAsync(connection, 9999,false);
+await addedSystem.SearchSystemByIdAsync(connection, 1);
+

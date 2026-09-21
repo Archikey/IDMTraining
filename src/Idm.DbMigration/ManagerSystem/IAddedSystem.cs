@@ -11,6 +11,6 @@ namespace ManagerSystem
         Task SearchSystemByIdAsync(NpgsqlConnection npgsqlConnection, int systemId);
 
         Task UpdateSystemTimeAsync(NpgsqlConnection npgsqlConnection, int systemId, DateTime newTime);
-        
+        Task UpdateSystemStatusAsync(NpgsqlConnection connection, int systemId, bool isActive);
     }
 }

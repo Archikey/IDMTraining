@@ -102,7 +102,8 @@ namespace ManagerSystem
                 command.Parameters.Add(parameter);
 
                 command.CommandText = @"
-                    SELECT id, name_system, is_active, created_at
+                    SELECT id, name_system, is_active, created_at,
+                    updated_at
                     FROM systems
                     WHERE id = @systemId
                 ";
@@ -116,8 +117,9 @@ namespace ManagerSystem
                     var isActive = reader.GetBoolean(2);
                     var createdAt = reader.GetDateTime(3);
                     var createdAtType = reader.GetFieldType(3);
+                    var updatedAt = reader.IsDBNull(4) ? (DateTime?)null : reader.GetDateTime(4);
 
-                    Console.WriteLine($"Found system: ID={id}, Name={name}, Is Active={isActive}, Created At={createdAt}, Created At Type={createdAtType}");
+                    Console.WriteLine($"Found system: ID={id}, Name={name}, Is Active={isActive}, Created At={createdAt}, Created At Type={createdAtType}, Updated At={(updatedAt is null ? "null" : updatedAt.ToString())}");
 
                     Console.WriteLine($"Kind: {createdAt.Kind}");
                     Console.WriteLine($"UTC: {createdAt:O}");
@@ -157,6 +159,53 @@ namespace ManagerSystem
 
                 await command.ExecuteNonQueryAsync();
             }
+        }
+
+        public async Task UpdateSystemStatusAsync(NpgsqlConnection connection, int systemId, bool isActive)
+        {
+            await using (var command = connection.CreateCommand())
+            {
+                var idParameter = command.CreateParameter();
+                idParameter.ParameterName = "@systemId";
+                idParameter.Value = systemId;
+                idParameter.NpgsqlDbType = NpgsqlDbType.Integer;
+                command.Parameters.Add(idParameter);
+
+                var isActiveParameter = command.CreateParameter();
+                isActiveParameter.ParameterName = "@isActive";
+                isActiveParameter.Value = isActive;
+                isActiveParameter.NpgsqlDbType = NpgsqlDbType.Boolean;
+                command.Parameters.Add(isActiveParameter);
+
+                DateTime currentTime = DateTime.UtcNow;
+                var timeParameter = command.CreateParameter();
+                timeParameter.ParameterName = "@currentTime";
+                timeParameter.Value = currentTime;
+                timeParameter.NpgsqlDbType = NpgsqlDbType.TimestampTz;
+                command.Parameters.Add(timeParameter);
+
+                command.CommandText= @"
+                    UPDATE systems
+                    SET is_active = @isActive, 
+                    updated_at = @currentTime
+                    WHERE id = @systemId
+                    ";
+
+              var result = await command.ExecuteNonQueryAsync();
+
+           
+
+              if (result == 0)
+              {
+                  Console.WriteLine($"No system found with ID: {systemId}. No rows updated.");
+              } 
+              else
+              {
+                  Console.WriteLine($"System ID {systemId} updated successfully.\t");
+                  Console.Write("{0} row(s) updated.\n", result);
+              }
+            }
+            
         }
     }
 }

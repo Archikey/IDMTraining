@@ -52,3 +52,8 @@ await addedSystem.SearchSystemAsync(connection, "Test PostgreSQL");
 
 await addedSystem.AddSystemAsync(connection, "Linux Test", "Linux");
 await addedSystem.SearchSystemAsync(connection, "Linux Test");
+
+
+await addedSystem.SearchSystemByIdAsync(connection, 1);
+await addedSystem.SearchSystemByIdAsync(connection, 2);
+await addedSystem.SearchSystemByIdAsync(connection, 4);

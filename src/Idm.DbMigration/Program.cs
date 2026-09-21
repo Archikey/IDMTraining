@@ -57,3 +57,11 @@ await addedSystem.SearchSystemAsync(connection, "Linux Test");
 await addedSystem.SearchSystemByIdAsync(connection, 1);
 await addedSystem.SearchSystemByIdAsync(connection, 2);
 await addedSystem.SearchSystemByIdAsync(connection, 4);
+
+await addedSystem.UpdateSystemTimeAsync(connection, 1, DateTime.UtcNow);
+var now = DateTime.Now;
+Console.WriteLine($"Value: {now:O}");
+Console.WriteLine($"Kind: {now.Kind}");
+await addedSystem.UpdateSystemTimeAsync(connection, 1, now);
+await addedSystem.SearchSystemByIdAsync(connection, 1);
+

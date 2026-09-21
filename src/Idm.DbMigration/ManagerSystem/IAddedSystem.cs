@@ -9,5 +9,8 @@ namespace ManagerSystem
         Task SearchSystemAsync(NpgsqlConnection npgsqlConnection, string systemName);
 
         Task SearchSystemByIdAsync(NpgsqlConnection npgsqlConnection, int systemId);
+
+        Task UpdateSystemTimeAsync(NpgsqlConnection npgsqlConnection, int systemId, DateTime newTime);
+        
     }
 }

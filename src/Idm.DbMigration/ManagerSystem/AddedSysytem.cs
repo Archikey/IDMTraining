@@ -1,4 +1,5 @@
 using NpgsqlTypes;
+using System;
 using Npgsql;
 
 namespace ManagerSystem
@@ -126,6 +127,35 @@ namespace ManagerSystem
                 {
                     Console.WriteLine($"No system found with ID: {systemId}");
                 }
+            }
+        }
+
+        public async Task UpdateSystemTimeAsync(NpgsqlConnection npgsqlConnection, int systemId, DateTime newTime)
+        {
+            await using (var command = npgsqlConnection.CreateCommand())
+            {
+
+                DateTime utcTime = newTime.ToUniversalTime();
+
+                var idParameter = command.CreateParameter();
+                idParameter.ParameterName = "@systemId";
+                idParameter.Value = systemId;
+                idParameter.NpgsqlDbType = NpgsqlDbType.Integer;
+                command.Parameters.Add(idParameter);
+
+                var timeParameter = command.CreateParameter();
+                timeParameter.ParameterName = "@newTime";
+                timeParameter.Value = utcTime;
+                timeParameter.NpgsqlDbType = NpgsqlDbType.TimestampTz;
+                command.Parameters.Add(timeParameter);
+
+                command.CommandText = @"
+                    UPDATE systems
+                    SET created_at = @newTime
+                    WHERE id = @systemId
+                ";
+
+                await command.ExecuteNonQueryAsync();
             }
         }
     }

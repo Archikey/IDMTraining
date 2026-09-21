@@ -47,5 +47,8 @@ await using (DbCommand command = connection.CreateCommand())
 
 IAddedSystem addedSystem = new AddedSystem();
 
-await addedSystem.AddSystemAsync(connection, "Test PostgreSQL", "Training System", "Postgres");
+await addedSystem.AddSystemAsync(connection, "Test PostgreSQL", "Postgres", "Training System");
 await addedSystem.SearchSystemAsync(connection, "Test PostgreSQL");
+
+await addedSystem.AddSystemAsync(connection, "Linux Test", "Linux");
+await addedSystem.SearchSystemAsync(connection, "Linux Test");

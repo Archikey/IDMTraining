@@ -6,22 +6,33 @@ namespace ManagerSystem
     public class AddedSystem : IAddedSystem
     {
         public async Task AddSystemAsync(NpgsqlConnection npgsqlConnection,
-         string newSystemName, string newSystemDescription, string newSystemType)
+         string newSystemName, string newSystemType, string? newSystemDescription = null)
         {
 
 
             await using (var command = npgsqlConnection.CreateCommand())
             {
-              
+
                 var nameParameter = command.CreateParameter();
                 nameParameter.ParameterName = "@newSystemName";
                 nameParameter.Value = newSystemName;
                 command.Parameters.Add(nameParameter);
-                
+
                 var descriptionParameter = command.CreateParameter();
                 descriptionParameter.ParameterName = "@newSystemDescription";
-                descriptionParameter.Value = newSystemDescription;
+                if (newSystemDescription is null)
+                {
+
+                    descriptionParameter.Value = DBNull.Value;
+
+                }
+                else
+                {
+                    descriptionParameter.Value = newSystemDescription;
+                }
                 command.Parameters.Add(descriptionParameter);
+
+
 
                 var typeParameter = command.CreateParameter();
                 typeParameter.ParameterName = "@newSystemType";
@@ -34,7 +45,7 @@ namespace ManagerSystem
                     VALUES
                     (@newSystemName, @newSystemDescription, @newSystemType)
                 ";
-                
+
                 await command.ExecuteNonQueryAsync();
             }
         }
@@ -60,10 +71,14 @@ namespace ManagerSystem
                 {
                     var id = reader.GetInt32(0);
                     var name = reader.GetString(1);
-                    var description = reader.GetString(2);
+
+
+
+                    string? description = reader.IsDBNull(2) ? null : reader.GetString(2);
+
                     var systemType = reader.GetString(3);
 
-                    Console.WriteLine($"Found system: ID={id}, Name={name}, Description={description}, Type={systemType}");
+                    Console.WriteLine($"Found system: ID={id}, Name={name}, Description={(description is null ? "null" : description)}, Type={systemType}");
                 }
                 else
                 {

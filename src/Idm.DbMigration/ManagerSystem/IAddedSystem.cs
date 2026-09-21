@@ -5,7 +5,12 @@ namespace ManagerSystem
     interface IAddedSystem
     {
         Task AddSystemAsync(NpgsqlConnection npgsqlConnection,
-         string newSystemName, string newSystemDescription, string newSystemType);
+         string newSystemName, string newSystemType, string? newSystemDescription = null);
         Task SearchSystemAsync(NpgsqlConnection npgsqlConnection, string systemName);
+
+        Task SearchSystemByIdAsync(NpgsqlConnection npgsqlConnection, int systemId);
+
+        Task UpdateSystemTimeAsync(NpgsqlConnection npgsqlConnection, int systemId, DateTime newTime);
+        Task UpdateSystemStatusAsync(NpgsqlConnection connection, int systemId, bool isActive);
     }
 }

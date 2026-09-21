@@ -3,7 +3,8 @@
 ## Команды для инициализации проекта
 
 ### Создание файлов
-```
+
+```bash
 dotnet new sln -n IdmTraining
 
 mkdir src
@@ -21,7 +22,7 @@ dotnet new worker -n Idm.Worker -o src/Idm.Worker
 
 ### Добавление в решение
 
-```
+```bash
 dotnet sln add src/Idm.Api/Idm.Api.csproj
 dotnet sln add src/Idm.Domain/Idm.Domain.csproj
 dotnet sln add src/Idm.Application/Idm.Application.csproj
@@ -76,4 +77,14 @@ git push origin develop
 
 ```bash
 git merge --no-ff feature/project-initialization -m "Merge branch 'feature/project-initialization' into develop"
-```>>>>>>> Stashed changes
+```
+
+
+## База данных
+
+Создание файла
+
+```bash
+mkdir database/migrations
+ni database/migrations/001_initial_schema.sql
+```

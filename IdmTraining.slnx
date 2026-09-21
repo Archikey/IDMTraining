@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/Idm.Api/Idm.Api.csproj" />
     <Project Path="src/Idm.Application/Idm.Application.csproj" />
+    <Project Path="src/Idm.DbMigration/Idm.DbMigration.csproj" />
     <Project Path="src/Idm.Domain/Idm.Domain.csproj" />
     <Project Path="src/Idm.Infrastructure/Idm.Infrastructure.csproj" />
     <Project Path="src/Idm.Worker/Idm.Worker.csproj" />

@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using ManagerSystem;
 using Npgsql;
 
 
@@ -43,3 +44,8 @@ await using (DbCommand command = connection.CreateCommand())
         Console.WriteLine($"- {tableName}");
     }
 }
+
+IAddedSystem addedSystem = new AddedSystem();
+
+await addedSystem.AddSystemAsync(connection, "Test PostgreSQL", "Training System", "Postgres");
+await addedSystem.SearchSystemAsync(connection, "Test PostgreSQL");

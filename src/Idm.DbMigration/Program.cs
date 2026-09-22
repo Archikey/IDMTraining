@@ -51,12 +51,15 @@ await addedSystem.AddSystemAsync(connection, "Test PostgreSQL", "Postgres", "Tra
 await addedSystem.SearchSystemAsync(connection, "Test PostgreSQL");
 
 await addedSystem.AddSystemAsync(connection, "Linux Test", "Linux");
+await addedSystem.AddSystemAsync(connection, "Linux Temp", "Linux");
 await addedSystem.SearchSystemAsync(connection, "Linux Test");
+
 
 
 await addedSystem.SearchSystemByIdAsync(connection, 1);
 await addedSystem.SearchSystemByIdAsync(connection, 2);
 await addedSystem.SearchSystemByIdAsync(connection, 4);
+
 
 await addedSystem.UpdateSystemTimeAsync(connection, 1, DateTime.UtcNow);
 var now = DateTime.Now;
@@ -72,3 +75,8 @@ await addedSystem.UpdateSystemStatusAsync(connection, 1, false);
 await addedSystem.UpdateSystemStatusAsync(connection, 9999,false);
 await addedSystem.SearchSystemByIdAsync(connection, 1);
 
+int id=await addedSystem.SearchSystemAsync(connection, "Linux Temp");
+
+await addedSystem.DeleteSystemAsync(connection, id);
+await addedSystem.DeleteSystemAsync(connection, 9999);
+await addedSystem.DeleteSystemAsync(connection, 1);

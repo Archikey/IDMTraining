@@ -54,7 +54,7 @@ namespace ManagerSystem
             }
         }
 
-        public async Task SearchSystemAsync(NpgsqlConnection npgsqlConnection, string systemName)
+        public async Task<int> SearchSystemAsync(NpgsqlConnection npgsqlConnection, string systemName)
         {
             await using (var command = npgsqlConnection.CreateCommand())
             {
@@ -83,10 +83,12 @@ namespace ManagerSystem
                     var systemType = reader.GetString(3);
 
                     Console.WriteLine($"Found system: ID={id}, Name={name}, Description={(description is null ? "null" : description)}, Type={systemType}");
+                    return id;
                 }
                 else
                 {
                     Console.WriteLine($"No system found with name: {systemName}");
+                    return -1;
                 }
             }
         }
@@ -206,6 +208,34 @@ namespace ManagerSystem
               }
             }
             
+        }
+
+        public async Task DeleteSystemAsync(NpgsqlConnection connection, int systemId)
+        {
+            await using (var command = connection.CreateCommand())
+            {
+                var idParameter = command.CreateParameter();
+                idParameter.ParameterName = "@systemId";
+                idParameter.Value = systemId;
+                idParameter.NpgsqlDbType = NpgsqlDbType.Integer;
+                command.Parameters.Add(idParameter);
+
+                command.CommandText = @"
+                    DELETE FROM systems
+                    WHERE id = @systemId";
+
+               var result = await command.ExecuteNonQueryAsync();
+
+                if (result == 0)
+                {
+                    Console.WriteLine($"No system found with ID: {systemId}. No rows deleted.");
+                }
+                else
+                {
+                    Console.WriteLine($"System ID {systemId} deleted successfully.\t");
+                    Console.Write("{0} row(s) deleted.\n", result);
+                }
+            }       
         }
     }
 }

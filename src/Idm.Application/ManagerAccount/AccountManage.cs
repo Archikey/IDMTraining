@@ -44,24 +44,9 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
 
         if (await reader.ReadAsync())
         {
-
-
-
-            var createdAccount = new Account
-            {
-                Id = reader.GetInt32(0),
-                Login = reader.GetString(1),
-                AccountType = Enum.Parse<AccountType>(reader.GetString(2)),
-                DisplayName = reader.GetString(3),
-                CreatedAt = reader.GetDateTime(4),
-                UpdatedAt = reader.GetDateTime(5),
-                IsActive = reader.GetBoolean(6),
-                SystemId = reader.GetInt32(7)
-            };
-
+            var createdAccount = MapAccount(reader);
             
             return createdAccount;
-
         }
         else
         {
@@ -77,6 +62,38 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
 
     public async Task<Account?> FindAccountByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        await using var command = _connection.CreateCommand();
+        FactoryParameter.CreateAndAddParameter(command, "@Id", FactoryType.Integer, id);
+
+        command.CommandText = """
+        SELECT * FROM accounts
+        WHERE id = @id;
+        """;
+
+        await using var reader = await command.ExecuteReaderAsync();
+
+        if (await reader.ReadAsync())
+        {
+            var createdAccount = MapAccount(reader);
+            
+            return createdAccount;
+        }
+        else
+        {
+            return null;
+        }
     }
+
+    private static Account MapAccount(NpgsqlDataReader reader) =>
+        new()
+        {
+            Id = reader.GetInt32(0),
+            Login = reader.GetString(1),
+            AccountType = Enum.Parse<AccountType>(reader.GetString(2)),
+            DisplayName = reader.GetString(3),
+            CreatedAt = reader.GetDateTime(4),
+            UpdatedAt = reader.GetDateTime(5),
+            IsActive = reader.GetBoolean(6),
+            SystemId = reader.GetInt32(7)
+        };
 }

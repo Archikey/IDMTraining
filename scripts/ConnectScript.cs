@@ -20,16 +20,27 @@ var account = new Account
     IsActive = true,
     SystemId = 1,
 };
+int id = 0;
 try
 {
     var checkUser = await new AccountManage(connection).CreateAccountAsync(account);
 
     if (checkUser is not null)
     {
+        id = checkUser.Id;
         Console.WriteLine($"Login: {checkUser.Login} Id: {checkUser.Id}");
     }
 }
 catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
 {
     Console.WriteLine("An account like that already exists.");
+    id = 6;
+}
+
+
+var findAccount = await new AccountManage(connection).FindAccountByIdAsync(id);
+
+if (findAccount is not null)
+{
+    Console.WriteLine($"Login: {findAccount.Login} Id: {findAccount.Id}");
 }

@@ -57,8 +57,6 @@ dotnet list src/Idm.Application/Idm.Application.csproj reference
 dotnet restore
 dotnet build
 ```
-<<<<<<< Updated upstream
-=======
 
 
 ## Merge branch

@@ -19,10 +19,7 @@ namespace Idm.ConcurrencyLab.Counter
                 {
                     for (int j = 0; j < maxCount; j++)
                     {
-                        // lock (_countLock)
-                        // {
-                        //     _count++;
-                        // }
+
                         Interlocked.Increment(ref _count);
 
                     }

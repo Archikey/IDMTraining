@@ -18,7 +18,7 @@ var account = new Account
     DisplayName = "Archikey",
     AccountType = AccountType.Privileged,
     IsActive = true,
-    SystemId = 1,
+    SystemId = 9,
 };
 int id = 0;
 try
@@ -34,7 +34,7 @@ try
 catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
 {
     Console.WriteLine("An account like that already exists.");
-    id = 6;
+    id = 19;
 }
 
 
@@ -42,5 +42,38 @@ var findAccount = await new AccountManage(connection).FindAccountByIdAsync(id);
 
 if (findAccount is not null)
 {
-    Console.WriteLine($"Login: {findAccount.Login} Id: {findAccount.Id}");
+    Console.WriteLine($"Find - Login: {findAccount.Login} Id: {findAccount.Id}");
+}
+
+
+
+var account2 = new Account
+{
+    Login = "Archikey228",
+    DisplayName = "Archikey228",
+    AccountType = AccountType.Privileged,
+    IsActive = true,
+    SystemId = 9,
+};
+try
+{
+    var checkUser = await new AccountManage(connection).CreateAccountAsync(account2);
+
+    if (checkUser is not null)
+    {
+        id = checkUser.Id;
+        Console.WriteLine($"Login: {checkUser.Login} Id: {checkUser.Id}");
+    }
+}
+catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
+{
+    Console.WriteLine("An account like that already exists.");
+}
+
+
+var accounts = await new AccountManage(connection).FindAccountByBelongingToSystemAsync(9);
+
+foreach (var item in accounts)
+{
+    Console.WriteLine($"Login: {item.Login} - Id: {item.Id}");
 }

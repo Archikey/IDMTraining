@@ -45,7 +45,7 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
         if (await reader.ReadAsync())
         {
             var createdAccount = MapAccount(reader);
-            
+
             return createdAccount;
         }
         else
@@ -57,7 +57,36 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
 
     public async Task<List<Account>> FindAccountByBelongingToSystemAsync(int systemId)
     {
-        throw new NotImplementedException();
+        await using var command = _connection.CreateCommand();
+        FactoryParameter.CreateAndAddParameter(command, "@systemId", FactoryType.Integer, systemId);
+
+        command.CommandText = """
+        SELECT
+        a.id,
+        a.login_account,
+        a.account_type,
+        a.display_name,
+        a.created_at,
+        a.updated_at,
+        a.is_active,
+        a.system_id
+        FROM accounts AS a
+        INNER JOIN systems AS s 
+        ON a.system_id = s.id
+        WHERE a.system_id = @systemId
+        AND
+        s.is_active = true
+        """;
+
+        await using var reader = await command.ExecuteReaderAsync();
+        List<Account> accounts = new List<Account>();
+        while (await reader.ReadAsync())
+        {
+            var acc = MapAccount(reader);
+            accounts.Add(acc);
+        }
+
+        return accounts;
     }
 
     public async Task<Account?> FindAccountByIdAsync(int id)
@@ -75,7 +104,7 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
         if (await reader.ReadAsync())
         {
             var createdAccount = MapAccount(reader);
-            
+
             return createdAccount;
         }
         else

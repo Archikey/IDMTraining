@@ -24,6 +24,19 @@ public class IntParameter : Parameter
         return parameter;
     }
 }
+public class LongParameter : Parameter
+{
+    public long Value { get; set; }
+
+    public override NpgsqlParameter CreateParameter(NpgsqlCommand command, string nameParameter)
+    {
+        var parameter = command.CreateParameter();
+        parameter.ParameterName = nameParameter;
+        parameter.Value = Value;
+        parameter.NpgsqlDbType = NpgsqlDbType.Bigint;
+        return parameter;
+    }
+}
 
 public class VarcharParameter : Parameter
 {
@@ -74,6 +87,7 @@ public static class FactoryParameter
         Parameter parameter = type switch
         {
             FactoryType.Integer => new IntParameter { Value = Convert.ToInt32(value) },
+            FactoryType.Long => new LongParameter { Value = Convert.ToInt64(value) },
             FactoryType.Varchar => new VarcharParameter { Value = value?.ToString() ?? string.Empty },
             FactoryType.DateTime => new DateTimeParameter { Value = Convert.ToDateTime(value) },
             FactoryType.Boolean => new BoolParameter { Value = Convert.ToBoolean(value) },
@@ -90,6 +104,7 @@ public enum FactoryType
     Integer,
     Varchar,
     DateTime,
-    Boolean
+    Boolean,
+    Long
 
 }

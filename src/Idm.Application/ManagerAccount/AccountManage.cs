@@ -125,4 +125,39 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
             IsActive = reader.GetBoolean(6),
             SystemId = reader.GetInt32(7)
         };
+
+    private static AccountStatistics MapAccountStatistic(NpgsqlDataReader reader) =>
+        new AccountStatistics(
+            reader.GetString(0),
+            Enum.Parse<AccountType>(reader.GetString(1)),
+            reader.GetInt64(2));
+    public async Task<List<AccountStatistics>> GetAccountStatisticsAsync()
+    {
+        await using var command = _connection.CreateCommand();
+        command.CommandText = """"
+        SELECT 
+        s.name_system,
+        a.account_type,
+        COUNT(*)
+        FROM accounts AS a
+        INNER JOIN systems AS s
+        ON a.system_id = s.id
+        GROUP BY
+        s.name_system,
+        a.account_type
+        ORDER BY
+        s.name_system,
+        a.account_type;
+        """";
+
+        await using var reader = await command.ExecuteReaderAsync();
+        List<AccountStatistics> accounts = new List<AccountStatistics>();
+        while (await reader.ReadAsync())
+        {
+            var acc = MapAccountStatistic(reader);
+            accounts.Add(acc);
+        }
+
+        return accounts;
+    }
 }

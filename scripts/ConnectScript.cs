@@ -77,3 +77,10 @@ foreach (var item in accounts)
 {
     Console.WriteLine($"Login: {item.Login} - Id: {item.Id}");
 }
+
+var accountStatistic = await new AccountManage(connection).GetAccountStatisticsAsync();
+
+foreach (var item in accountStatistic)
+{
+    Console.WriteLine($"System Name: {item.SystemName}\tAccount type: {item.AccountType}\tCount: {item.Count}");
+}

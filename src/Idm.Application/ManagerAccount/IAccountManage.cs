@@ -10,5 +10,7 @@ namespace Idm.Application.ManagerAccount;
 
         public Task<List<Account>> FindAccountByBelongingToSystemAsync(int systemId);
 
+        public Task<List<AccountStatistics>> GetAccountStatisticsAsync();
+
 
     }

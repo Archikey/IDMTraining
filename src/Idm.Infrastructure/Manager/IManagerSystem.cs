@@ -1,8 +1,8 @@
 using Npgsql;
 
-namespace ManagerSystem
+namespace Idm.Infrastructure.Manager
 {
-    interface IAddedSystem
+    public interface IManagerSystem
     {
         Task AddSystemAsync(NpgsqlConnection npgsqlConnection,
          string newSystemName, string newSystemType, string? newSystemDescription = null);

@@ -12,6 +12,12 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
 
     private readonly NpgsqlConnection _connection = npgsqlConnection;
 
+
+    public async Task<Account?> UpdateAccountAsync(int id, Account account)
+    {
+        
+        return null;
+    }
     public async Task<Account?> CreateAccountAsync(Account account)
     {
         await using var command = _connection.CreateCommand();

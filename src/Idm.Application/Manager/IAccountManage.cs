@@ -12,7 +12,7 @@ namespace Idm.Application.Manager;
 
         public Task<List<AccountStatistics>> GetAccountStatisticsAsync();
 
-        public Task<Account?> UpdateAccountAsync(int id, Account account);
+        public Task<Account?> UpdateAccountAsync(Account account);
 
 
     }

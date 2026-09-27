@@ -33,34 +33,22 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
         is_active AS IsActive,
         system_id AS SystemId;
         """;
-        await using var transaction = await _connection.BeginTransactionAsync();
+
         Account? resultAccount;
-        try
-        {
-            account.UpdatedAt = DateTime.UtcNow;
-            resultAccount = await _connection.QuerySingleOrDefaultAsync<Account>(
-                   sqlUpdate,
-                   new
-                   {
-                       account.Id,
-                       account.Login,
-                       account.DisplayName,
-                       AccountType = account.AccountType.ToString(),
-                       account.IsActive,
-                       account.SystemId,
-                       account.UpdatedAt
-                   },
-                   transaction: transaction
-               );
-            await transaction.CommitAsync();
-        }
-        catch (System.Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-
-        }
-
+        account.UpdatedAt = DateTime.UtcNow;
+        resultAccount = await _connection.QuerySingleOrDefaultAsync<Account>(
+               sqlUpdate,
+               new
+               {
+                   account.Id,
+                   account.Login,
+                   account.DisplayName,
+                   AccountType = account.AccountType.ToString(),
+                   account.IsActive,
+                   account.SystemId,
+                   account.UpdatedAt
+               }
+           );
 
         return resultAccount;
     }

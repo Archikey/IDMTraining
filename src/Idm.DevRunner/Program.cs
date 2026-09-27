@@ -33,6 +33,14 @@ var account = new Account
     IsActive = true,
     SystemId = systemId,
 };
+var account2 = new Account
+{
+    Login = "Archikey",
+    DisplayName = "Archikey",
+    AccountType = AccountType.Privileged,
+    IsActive = true,
+    SystemId = systemId,
+};
 
 Account? checkAccount;
 try
@@ -53,16 +61,38 @@ if (checkAccount is not null)
 }
 
 
+
 try
 {
-
+    Console.WriteLine($"Time {checkAccount!.UpdatedAt}");
     checkAccount!.DisplayName = "Archikey228";
     var result = await accountManage.UpdateAccountAsync(checkAccount!);
 
     if (result is not null)
+    {
+        Console.WriteLine($"Time {result!.UpdatedAt}");
         Console.WriteLine($"Display Name: {result.DisplayName} Id: {result.Id}");
+    }
+
 
     Console.WriteLine("END");
+}
+catch (System.Exception)
+{
+
+    throw;
+}
+
+
+try
+{
+    checkAccount.Id = 9999;
+    var result = await accountManage.UpdateAccountAsync(checkAccount);
+    if (result is null)
+        System.Console.WriteLine("NULL");
+
+
+
 }
 catch (System.Exception)
 {

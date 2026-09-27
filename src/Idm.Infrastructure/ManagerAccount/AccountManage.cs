@@ -40,7 +40,16 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
             account.UpdatedAt = DateTime.UtcNow;
             resultAccount = await _connection.QuerySingleOrDefaultAsync<Account>(
                    sqlUpdate,
-                   account,
+                   new
+                   {
+                       account.Id,
+                       account.Login,
+                       account.DisplayName,
+                       AccountType = account.AccountType.ToString(),
+                       account.IsActive,
+                       account.SystemId,
+                       account.UpdatedAt
+                   },
                    transaction: transaction
                );
             await transaction.CommitAsync();
@@ -49,7 +58,7 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
         {
             await transaction.RollbackAsync();
             throw;
-            
+
         }
 
 

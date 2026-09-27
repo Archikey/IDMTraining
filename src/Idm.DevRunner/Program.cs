@@ -1,7 +1,4 @@
-#:package Npgsql@10.0.3
-#:project ../src/Idm.Application/Idm.Application.csproj
-#:project ../src/Idm.Infrastructure/Idm.Infrastructure.csproj
-
+﻿
 using NpgsqlTypes;
 using Npgsql;
 using Idm.Domain.Entities;
@@ -22,10 +19,11 @@ try
 {
     await managerSystem.AddSystemAsync(connection, "MyLinux", "Linux");
 }
-catch
+catch (PostgresException ex)
+    when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
 {
-    
 }
+var systemId = await managerSystem.SearchSystemAsync(connection, "MyLinux");
 
 var account = new Account
 {
@@ -33,7 +31,7 @@ var account = new Account
     DisplayName = "Archikey",
     AccountType = AccountType.Privileged,
     IsActive = true,
-    SystemId = 0,
+    SystemId = systemId,
 };
 
 Account? checkAccount;
@@ -41,23 +39,33 @@ try
 {
     checkAccount = await accountManage.CreateAccountAsync(account);
 
-    if (checkAccount is not null)
-    {
-        
-        Console.WriteLine($"Login: {checkAccount.Login} Id: {checkAccount.Id}");
-    }
 }
 catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
 {
     Console.WriteLine("An account like that already exists.");
-    checkAccount = await accountManage.FindAccountByIdAsync(1);
+    checkAccount = await accountManage.FindAccountByIdAsync(2);
 }
 
-account.DisplayName= "Archikey228";
+if (checkAccount is not null)
+{
 
-var result = await accountManage.UpdateAccountAsync(account);
+    Console.WriteLine($"Display Name: {checkAccount.DisplayName} Id: {checkAccount.Id}");
+}
 
-if (result is not null)
-    Console.WriteLine($"Login: {result.DisplayName} Id: {result.Id}");
 
-Console.WriteLine("END");
+try
+{
+
+    checkAccount!.DisplayName = "Archikey228";
+    var result = await accountManage.UpdateAccountAsync(checkAccount!);
+
+    if (result is not null)
+        Console.WriteLine($"Display Name: {result.DisplayName} Id: {result.Id}");
+
+    Console.WriteLine("END");
+}
+catch (System.Exception)
+{
+
+    throw;
+}

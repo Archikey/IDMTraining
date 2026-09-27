@@ -1,6 +1,6 @@
 using Idm.Domain.Entities;
 
-namespace Idm.Application.ManagerAccount;
+namespace Idm.Infrastructure.Manager;
 
     public interface IAccountManage
     {

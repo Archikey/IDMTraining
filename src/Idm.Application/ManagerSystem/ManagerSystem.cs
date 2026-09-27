@@ -1,10 +1,11 @@
 using NpgsqlTypes;
 using System;
 using Npgsql;
+using Idm.Infrastructure.Manager;
 
 namespace ManagerSystem
 {
-    public class AddedSystem : IAddedSystem
+    public class ManagerSystem : IManagerSystem
     {
         public async Task AddSystemAsync(NpgsqlConnection npgsqlConnection,
          string newSystemName, string newSystemType, string? newSystemDescription = null)

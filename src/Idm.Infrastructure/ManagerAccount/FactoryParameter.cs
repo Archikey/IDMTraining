@@ -4,7 +4,7 @@ using NpgsqlTypes;
 using System;
 using System.Data.Common;
 
-namespace Idm.Application.ManagerAccount;
+namespace Idm.Infrastructure.ManagerAccount;
 
 public abstract class Parameter
 {

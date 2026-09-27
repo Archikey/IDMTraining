@@ -1,6 +1,6 @@
 using Npgsql;
 
-namespace Idm.Infrastructure.Manager
+namespace Idm.Application.Manager
 {
     public interface IManagerSystem
     {

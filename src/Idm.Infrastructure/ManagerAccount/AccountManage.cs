@@ -3,8 +3,9 @@ using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Data.Common;
-using Idm.Infrastructure.Manager;
-namespace Idm.Application.ManagerAccount;
+using Idm.Application.Manager;
+
+namespace Idm.Infrastructure.ManagerAccount;
 
 public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
 {

@@ -1,10 +1,12 @@
 #:package Npgsql@10.0.3
 #:project ../src/Idm.Application/Idm.Application.csproj
+#:project ../src/Idm.Infrastructure/Idm.Infrastructure.csproj
 
 using NpgsqlTypes;
 using Npgsql;
 using Idm.Domain.Entities;
-using Idm.Application.ManagerAccount;
+using Idm.Application.Manager;
+using Idm.Infrastructure.ManagerAccount;
 using System;
 
 var connectionString = Environment.GetEnvironmentVariable("IDM_DB_CONNECTION")

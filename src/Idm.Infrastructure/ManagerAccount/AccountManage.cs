@@ -4,6 +4,7 @@ using NpgsqlTypes;
 using System;
 using System.Data.Common;
 using Idm.Application.Manager;
+using Dapper;
 
 namespace Idm.Infrastructure.ManagerAccount;
 
@@ -12,6 +13,45 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
 
     private readonly NpgsqlConnection _connection = npgsqlConnection;
 
+
+    public async Task<Account?> UpdateAccountAsync(Account account)
+    {
+
+        string sqlUpdate = """
+        UPDATE accounts
+        SET login_account = @Login, account_type = @AccountType,
+        display_name = @DisplayName, updated_at = @UpdatedAt,
+        is_active = @IsActive, system_id = @SystemId
+        WHERE id = @Id
+        RETURNING
+        id AS Id,
+        login_account AS Login,
+        account_type AS AccountType,
+        display_name AS DisplayName,
+        created_at AS CreatedAt,
+        updated_at AS UpdatedAt,
+        is_active AS IsActive,
+        system_id AS SystemId;
+        """;
+
+        Account? resultAccount;
+        account.UpdatedAt = DateTime.UtcNow;
+        resultAccount = await _connection.QuerySingleOrDefaultAsync<Account>(
+               sqlUpdate,
+               new
+               {
+                   account.Id,
+                   account.Login,
+                   account.DisplayName,
+                   AccountType = account.AccountType.ToString(),
+                   account.IsActive,
+                   account.SystemId,
+                   account.UpdatedAt
+               }
+           );
+
+        return resultAccount;
+    }
     public async Task<Account?> CreateAccountAsync(Account account)
     {
         await using var command = _connection.CreateCommand();

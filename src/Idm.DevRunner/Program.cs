@@ -6,6 +6,7 @@ using Idm.Application.Manager;
 using Idm.Infrastructure.ManagerAccount;
 using System;
 using Idm.Infrastructure.ManagerSystem;
+using Dapper;
 
 var connectionString = Environment.GetEnvironmentVariable("IDM_DB_CONNECTION")
 ?? throw new InvalidOperationException("IDM_DB_CONNECTION environment variable is not set.");
@@ -92,7 +93,61 @@ catch (System.Exception)
 //     throw;
 // }
 
+
+string sqlCreateRole = """
+INSERT INTO roles (name_role, system_id)
+VALUES (@nameRole, @systemId)
+RETURNING
+id;
+""";
+
+string sqlRoleInsert = """
+INSERT INTO accounts_roles (accounts_id, roles_id)
+VALUES (@accountId, @roleId);
+""";
+
+var roleId = await connection.ExecuteScalarAsync<int>(
+    sqlCreateRole,
+    new
+    {
+        nameRole = "Admin",
+        systemId
+    });
+
+await connection.ExecuteAsync(sqlRoleInsert,
+new
+{
+    accountId = checkAccount.Id,
+    roleId
+}
+);
+
+string sqlSelect = """
+SELECT COUNT(*)
+FROM accounts_roles
+WHERE accounts_id = @accountId;
+""";
+var resultSelect = await connection.ExecuteScalarAsync<long>(sqlSelect,
+new
+{
+    accountId = checkAccount.Id
+}
+);
+
+System.Console.WriteLine($"result: {resultSelect}");
+
 bool isDeleted = await accountManage.DeleteAccountAsync(checkAccount.Id);
 bool isDeleted2 = await accountManage.DeleteAccountAsync(checkAccount.Id);
 
 System.Console.WriteLine($"Test 1 - {isDeleted}\tTest 2 - {isDeleted2}");
+
+
+resultSelect = await connection.ExecuteScalarAsync<long>(sqlSelect,
+new
+{
+    accountId = checkAccount.Id
+}
+);
+
+System.Console.WriteLine($"result: {resultSelect}");
+

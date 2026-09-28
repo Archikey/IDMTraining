@@ -33,14 +33,6 @@ var account = new Account
     IsActive = true,
     SystemId = systemId,
 };
-var account2 = new Account
-{
-    Login = "Archikey",
-    DisplayName = "Archikey",
-    AccountType = AccountType.Privileged,
-    IsActive = true,
-    SystemId = systemId,
-};
 
 Account? checkAccount;
 try
@@ -84,18 +76,23 @@ catch (System.Exception)
 }
 
 
-try
-{
-    checkAccount.Id = 9999;
-    var result = await accountManage.UpdateAccountAsync(checkAccount);
-    if (result is null)
-        System.Console.WriteLine("NULL");
+// try
+// {
+//     checkAccount.Id = 9999;
+//     var result = await accountManage.UpdateAccountAsync(checkAccount);
+//     if (result is null)
+//         System.Console.WriteLine("NULL");
 
 
 
-}
-catch (System.Exception)
-{
+// }
+// catch (System.Exception)
+// {
 
-    throw;
-}
+//     throw;
+// }
+
+bool isDeleted = await accountManage.DeleteAccountAsync(checkAccount.Id);
+bool isDeleted2 = await accountManage.DeleteAccountAsync(checkAccount.Id);
+
+System.Console.WriteLine($"Test 1 - {isDeleted}\tTest 2 - {isDeleted2}");

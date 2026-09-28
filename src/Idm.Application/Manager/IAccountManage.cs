@@ -14,5 +14,7 @@ namespace Idm.Application.Manager;
 
         public Task<Account?> UpdateAccountAsync(Account account);
 
+        public Task<bool> DeleteAccountAsync(int id);
+
 
     }

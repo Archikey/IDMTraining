@@ -201,4 +201,17 @@ public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
 
         return accounts;
     }
+
+    public async Task<bool> DeleteAccountAsync(int id)
+    {
+
+        string sqlCommand = """
+        DELETE FROM accounts
+        WHERE id = @id
+        """;
+
+        var result = await _connection.ExecuteAsync(sqlCommand, new { id });
+
+        return result > 0;
+    }
 }

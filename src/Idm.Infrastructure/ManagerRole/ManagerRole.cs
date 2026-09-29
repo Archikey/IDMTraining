@@ -14,13 +14,13 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
     public async Task<Role?> CreateRoleAsync(Role role)
     {
         string sqlCreate = """
-        INSERT INTO roles (name_role,description, system_id)
+        INSERT INTO roles (name_role, description, system_id)
         VALUES
         (@NameRole, @Description, @SystemId)
         RETURNING
         id AS Id,
         name_role AS NameRole,
-        description AS Description
+        description AS Description,
         created_at AS CreatedAt,
         system_id AS SystemId;
         """;

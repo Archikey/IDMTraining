@@ -30,8 +30,68 @@ public class ProcessRoles
         }
         var systemId = await managerSystem.SearchSystemAsync("MyLinuxRoles");
 
-        
+        var newRole = new Role()
+        {
 
+            NameRole = "Admin",
+            Description = "This test role",
+            SystemId = systemId
+        };
+        var resultRole = await managerRole.CreateRoleAsync(newRole);
+
+        Console.WriteLine($"ID: {resultRole!.Id}\tName: {resultRole!.NameRole}\tSystemID: {resultRole!.SystemId}\tDescription: {resultRole!.Description}");
+
+        try
+        {
+            await managerRole.CreateRoleAsync(new Role
+            {
+                NameRole = "Admin",
+                Description = "This test role",
+                SystemId = systemId
+            });
+        }
+        catch (System.Exception ex)
+        {
+            System.Console.WriteLine(ex.Message);
+        }
+
+        try
+        {
+            await managerRole.CreateRoleAsync(new Role
+            {
+                NameRole = "!qwwAdmin",
+                Description = "This test role",
+                SystemId = 999999
+            });
+        }
+        catch (System.Exception ex)
+        {
+            System.Console.WriteLine(ex.Message);
+        }
+
+        var getRole = await managerRole.GetRolesByIdAsync(resultRole.Id);
+
+        Console.WriteLine($"ID: {getRole!.Id}\tName: {getRole!.NameRole}\tSystemID: {getRole!.SystemId}");
+
+        getRole = null;
+
+        resultRole.NameRole = "Helper";
+
+        getRole = await managerRole.UpdateRolesAsync(resultRole);
+
+        Console.WriteLine($"ID: {getRole!.Id}\tName: {getRole!.NameRole}\tSystemID: {getRole!.SystemId}");
+
+        bool isDeleted = await managerRole.DeleteRolesAsync(resultRole.Id);
+        System.Console.WriteLine($"IsDeleted = {isDeleted}");
+        getRole = await managerRole.GetRolesByIdAsync(resultRole.Id);
+
+        if (getRole is null)
+        {
+            System.Console.WriteLine("GetRole is NULL");
+        }
+
+        isDeleted = await managerRole.DeleteRolesAsync(resultRole.Id);
+        System.Console.WriteLine($"IsDeleted = {isDeleted}");
 
     }
 }

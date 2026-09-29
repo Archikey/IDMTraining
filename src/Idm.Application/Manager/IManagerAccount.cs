@@ -2,7 +2,7 @@ using Idm.Domain.Entities;
 
 namespace Idm.Application.Manager;
 
-    public interface IAccountManage
+    public interface IManagerAccount
     {
         public Task<Account?> CreateAccountAsync(Account account);
 

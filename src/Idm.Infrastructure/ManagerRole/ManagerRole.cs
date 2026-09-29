@@ -11,23 +11,79 @@ namespace Idm.Infrastructure.ManagerAccount;
 public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
 {
     private readonly NpgsqlConnection _connection = npgsqlConnection;
-    public Task<Roles> CreateRoleAsync(Roles role, int systemId)
+    public async Task<Roles?> CreateRoleAsync(Roles role)
     {
-        throw new NotImplementedException();
+        string sqlCreate = """
+        INSERT INTO roles (name_role, system_id)
+        VALUES
+        (@NameRole, @SystemId)
+        RETURNING
+        id AS Id,
+        name_role AS NameRole,
+        created_at AS CreatedAt,
+        system_id AS SystemId;
+        """;
+        var result = await _connection.QuerySingleAsync<Roles>(sqlCreate,
+        new
+        {
+            role.NameRole,
+            role.SystemId
+        }
+        );
+
+        return result;
     }
 
-    public Task<bool> DeleteRolesAsync(int id)
+    public async Task<bool> DeleteRolesAsync(int id)
     {
-        throw new NotImplementedException();
+        string sqlDelete = """
+        DELETE FROM roles
+        WHERE id = @id
+        """;
+
+        var result = await _connection.ExecuteAsync(sqlDelete, new { id });
+
+        return result > 0;
     }
 
-    public Task<Roles> GetRolesByIdAsync(int id)
+    public async Task<Roles?> GetRolesByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        string sqlGet = """
+        SELECT 
+        id AS Id,
+        name_role AS NameRole,
+        created_at AS CreatedAt,
+        system_id AS SystemId
+        FROM roles
+        WHERE id = @id;
+        """;
+
+        var result = await _connection.QuerySingleOrDefaultAsync<Roles>(sqlGet, new { id });
+        return result;
     }
 
-    public Task<Roles> UpdateRolesAsync(Roles role)
+    public async Task<Roles?> UpdateRolesAsync(Roles role)
     {
-        throw new NotImplementedException();
+        string sqlUpdate = """
+        UPDATE roles
+        SET name_role = @NameRole, system_id = @SystemId
+        WHERE id = @Id
+        RETURNING
+        id AS Id,
+        name_role AS NameRole,
+        created_at AS CreatedAt,
+        system_id AS SystemId;
+        """;
+
+        var result = await _connection.QuerySingleOrDefaultAsync<Roles>(sqlUpdate,
+        new
+        {
+            role.Id,
+            role.NameRole,
+            role.SystemId
+        }
+        );
+
+        return result;
     }
 }

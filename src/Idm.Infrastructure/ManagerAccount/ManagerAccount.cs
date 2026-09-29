@@ -8,7 +8,7 @@ using Dapper;
 
 namespace Idm.Infrastructure.ManagerAccount;
 
-public class AccountManage(NpgsqlConnection npgsqlConnection) : IAccountManage
+public class ManagerAccount(NpgsqlConnection npgsqlConnection) : IManagerAccount
 {
 
     private readonly NpgsqlConnection _connection = npgsqlConnection;

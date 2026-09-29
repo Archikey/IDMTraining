@@ -25,7 +25,7 @@ var account = new Account
 int id = 0;
 try
 {
-    var checkUser = await new AccountManage(connection).CreateAccountAsync(account);
+    var checkUser = await new ManagerAccount(connection).CreateAccountAsync(account);
 
     if (checkUser is not null)
     {
@@ -40,7 +40,7 @@ catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViola
 }
 
 
-var findAccount = await new AccountManage(connection).FindAccountByIdAsync(id);
+var findAccount = await new ManagerAccount(connection).FindAccountByIdAsync(id);
 
 if (findAccount is not null)
 {
@@ -59,7 +59,7 @@ var account2 = new Account
 };
 try
 {
-    var checkUser = await new AccountManage(connection).CreateAccountAsync(account2);
+    var checkUser = await new ManagerAccount(connection).CreateAccountAsync(account2);
 
     if (checkUser is not null)
     {
@@ -73,14 +73,14 @@ catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViola
 }
 
 
-var accounts = await new AccountManage(connection).FindAccountByBelongingToSystemAsync(9);
+var accounts = await new ManagerAccount(connection).FindAccountByBelongingToSystemAsync(9);
 
 foreach (var item in accounts)
 {
     Console.WriteLine($"Login: {item.Login} - Id: {item.Id}");
 }
 
-var accountStatistic = await new AccountManage(connection).GetAccountStatisticsAsync();
+var accountStatistic = await new ManagerAccount(connection).GetAccountStatisticsAsync();
 
 foreach (var item in accountStatistic)
 {

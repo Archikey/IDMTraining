@@ -13,7 +13,7 @@ var connectionString = Environment.GetEnvironmentVariable("IDM_DB_CONNECTION")
 await using var connection = new NpgsqlConnection(connectionString);
 await connection.OpenAsync();
 
-IAccountManage accountManage = new AccountManage(connection);
+IManagerAccount accountManage = new ManagerAccount(connection);
 IManagerSystem managerSystem = new ManagerSystem();
 
 try

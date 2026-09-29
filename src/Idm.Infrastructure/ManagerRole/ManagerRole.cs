@@ -14,12 +14,13 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
     public async Task<Roles?> CreateRoleAsync(Roles role)
     {
         string sqlCreate = """
-        INSERT INTO roles (name_role, system_id)
+        INSERT INTO roles (name_role,description, system_id)
         VALUES
-        (@NameRole, @SystemId)
+        (@NameRole, @Description, @SystemId)
         RETURNING
         id AS Id,
         name_role AS NameRole,
+        description AS Description
         created_at AS CreatedAt,
         system_id AS SystemId;
         """;
@@ -27,6 +28,7 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
         new
         {
             role.NameRole,
+            role.Description,
             role.SystemId
         }
         );
@@ -52,6 +54,7 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
         SELECT 
         id AS Id,
         name_role AS NameRole,
+        description AS Description,
         created_at AS CreatedAt,
         system_id AS SystemId
         FROM roles
@@ -66,11 +69,12 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
     {
         string sqlUpdate = """
         UPDATE roles
-        SET name_role = @NameRole, system_id = @SystemId
+        SET name_role = @NameRole, description = @Description, system_id = @SystemId
         WHERE id = @Id
         RETURNING
         id AS Id,
         name_role AS NameRole,
+        description AS Description,
         created_at AS CreatedAt,
         system_id AS SystemId;
         """;
@@ -80,6 +84,7 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
         {
             role.Id,
             role.NameRole,
+            role.Description,
             role.SystemId
         }
         );

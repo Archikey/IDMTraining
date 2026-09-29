@@ -11,7 +11,7 @@ namespace Idm.Infrastructure.ManagerAccount;
 public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
 {
     private readonly NpgsqlConnection _connection = npgsqlConnection;
-    public async Task<Roles?> CreateRoleAsync(Roles role)
+    public async Task<Role?> CreateRoleAsync(Role role)
     {
         string sqlCreate = """
         INSERT INTO roles (name_role,description, system_id)
@@ -24,7 +24,7 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
         created_at AS CreatedAt,
         system_id AS SystemId;
         """;
-        var result = await _connection.QuerySingleAsync<Roles>(sqlCreate,
+        var result = await _connection.QuerySingleAsync<Role>(sqlCreate,
         new
         {
             role.NameRole,
@@ -48,7 +48,7 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
         return result > 0;
     }
 
-    public async Task<Roles?> GetRolesByIdAsync(int id)
+    public async Task<Role?> GetRolesByIdAsync(int id)
     {
         string sqlGet = """
         SELECT 
@@ -61,11 +61,11 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
         WHERE id = @id;
         """;
 
-        var result = await _connection.QuerySingleOrDefaultAsync<Roles>(sqlGet, new { id });
+        var result = await _connection.QuerySingleOrDefaultAsync<Role>(sqlGet, new { id });
         return result;
     }
 
-    public async Task<Roles?> UpdateRolesAsync(Roles role)
+    public async Task<Role?> UpdateRolesAsync(Role role)
     {
         string sqlUpdate = """
         UPDATE roles
@@ -79,7 +79,7 @@ public class ManagerRole(NpgsqlConnection npgsqlConnection) : IManagerRole
         system_id AS SystemId;
         """;
 
-        var result = await _connection.QuerySingleOrDefaultAsync<Roles>(sqlUpdate,
+        var result = await _connection.QuerySingleOrDefaultAsync<Role>(sqlUpdate,
         new
         {
             role.Id,

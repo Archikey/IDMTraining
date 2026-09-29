@@ -1,7 +1,7 @@
 namespace Idm.Domain.Entities;
 
 
-public sealed class Roles
+public sealed class Role
 {
 
     public int Id { get; set; }

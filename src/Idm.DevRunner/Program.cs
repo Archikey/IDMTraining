@@ -1,3 +1,3 @@
 ﻿
 
-await new ProcessRoles().Start();
+await new ProcessGrant().Start();

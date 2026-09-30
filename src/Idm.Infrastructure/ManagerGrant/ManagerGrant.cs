@@ -9,9 +9,9 @@ using Dapper;
 
 namespace Idm.Infrastructure.ManagerGrant;
 
-public class ManagerGrant(NpgsqlConnection connection) : IManagerGrant
+public class ManagerGrant(NpgsqlConnection npgsqlConnection) : IManagerGrant
 {
-    private readonly NpgsqlConnection _connection = connection;
+    private readonly NpgsqlConnection _connection = npgsqlConnection;
 
 
     public async Task<bool> GrantRoleAsync(int accountId, int roleId)
@@ -30,7 +30,7 @@ public class ManagerGrant(NpgsqlConnection connection) : IManagerGrant
         AND r.id = @roleId;
         """;
 
-        var affectedRows = await connection.ExecuteAsync(sqlCommand,
+        var affectedRows = await _connection.ExecuteAsync(sqlCommand,
         new
         {
             accountId,

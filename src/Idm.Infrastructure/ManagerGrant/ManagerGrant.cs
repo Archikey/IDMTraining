@@ -27,18 +27,27 @@ public class ManagerGrant(NpgsqlConnection npgsqlConnection) : IManagerGrant
         JOIN roles AS r
         ON a.system_id = r.system_id
         WHERE a.id = @accountId
-        AND r.id = @roleId;
+        AND r.id = @roleId
+        ON CONFLICT (accounts_id, roles_id) DO NOTHING;
         """;
 
-        var affectedRows = await _connection.ExecuteAsync(sqlCommand,
-        new
-        {
-            accountId,
-            roleId,
+        await _connection.ExecuteAsync(
+          sqlCommand,
+          new { accountId, roleId });
 
-        }
-        );
+        string selectRow = """
+            SELECT EXISTS (
+            SELECT 1
+            FROM accounts_roles
+            WHERE accounts_id = @accountId
+            AND roles_id = @roleId
+            );
+        """;
 
-        return affectedRows>0;
+        bool exists = await _connection.ExecuteScalarAsync<bool>(
+            selectRow,
+            new { accountId, roleId });
+
+        return exists;
     }
 }

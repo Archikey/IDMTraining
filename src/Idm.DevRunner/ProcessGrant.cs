@@ -36,16 +36,18 @@ public class ProcessGrant
 
         // var account = new Account
         // {
-        //     Login = "ArchikeyGrant",
+        //     Login = "ArchikeyGrant2",
         //     DisplayName = "ArchikeyGrant",
         //     AccountType = AccountType.Privileged,
         //     IsActive = true,
         //     SystemId = systemId,
         // };
         // Account? checkAccount;
+        // int accId =0;
         // try
         // {
         //     checkAccount = await managerAccount.CreateAccountAsync(account);
+        //     accId = checkAccount!.Id;
         //     //14 acc
         // }
         // catch (Exception)
@@ -55,16 +57,22 @@ public class ProcessGrant
         // var newRole = new Role()
         // {
 
-        //     NameRole = "Admin",
+        //     NameRole = "Admin2",
         //     Description = "This test role",
         //     SystemId = systemId
         // };
         // var resultRole = await managerRole.CreateRoleAsync(newRole);
-        //6 role
 
-        bool result = await managerGrant.GrantRoleAsync(13,6);
+
+
+        bool resultDead = await managerGrant.GrantRoleAsync(13,6);
+        System.Console.WriteLine(resultDead);
+
+        bool result = await managerGrant.GrantRoleAsync(14,6);
         System.Console.WriteLine(result);
 
+        // bool resultNew = await managerGrant.GrantRoleAsync(accId,resultRole!.Id);
+        // System.Console.WriteLine(resultNew);
 
     }
 }

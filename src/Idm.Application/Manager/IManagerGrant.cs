@@ -5,4 +5,5 @@ namespace Idm.Application.Manager;
 public interface IManagerGrant
 {
     public Task<bool> GrantRoleAsync(int accountId, int roleId);
+    public Task<bool> RevokeRoleAsync(int accountId, int roleId);
 }

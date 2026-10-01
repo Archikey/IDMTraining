@@ -65,10 +65,19 @@ public class ProcessGrant
 
 
 
-        bool resultDead = await managerGrant.GrantRoleAsync(13,6);
-        System.Console.WriteLine(resultDead);
+        // bool resultDead = await managerGrant.GrantRoleAsync(13,6);
+        // System.Console.WriteLine(resultDead);
 
-        bool result = await managerGrant.GrantRoleAsync(14,6);
+        bool result = await managerGrant.GrantRoleAsync(14, 6);
+        // System.Console.WriteLine(result);
+
+        result = await managerGrant.RevokeRoleAsync(14, 6);
+        System.Console.WriteLine(result);
+
+        result = await managerGrant.RevokeRoleAsync(14, 6);
+        System.Console.WriteLine(result);
+
+        result = await managerGrant.GrantRoleAsync(14, 6);
         System.Console.WriteLine(result);
 
         // bool resultNew = await managerGrant.GrantRoleAsync(accId,resultRole!.Id);

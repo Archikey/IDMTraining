@@ -71,14 +71,20 @@ public class ProcessGrant
         bool result = await managerGrant.GrantRoleAsync(14, 6);
         // System.Console.WriteLine(result);
 
-        result = await managerGrant.RevokeRoleAsync(14, 6);
-        System.Console.WriteLine(result);
+        // result = await managerGrant.RevokeRoleAsync(14, 6);
+        // System.Console.WriteLine(result);
 
-        result = await managerGrant.RevokeRoleAsync(14, 6);
-        System.Console.WriteLine(result);
+        // result = await managerGrant.RevokeRoleAsync(14, 6);
+        // System.Console.WriteLine(result);
 
-        result = await managerGrant.GrantRoleAsync(14, 6);
-        System.Console.WriteLine(result);
+        // result = await managerGrant.GrantRoleAsync(14, 6);
+        // System.Console.WriteLine(result);
+
+        var roles = await managerGrant.GetAccountRolesAsync(14);
+        foreach (var role in roles)
+        {
+            System.Console.WriteLine($"Role ID: {role.Id}, Name: {role.NameRole}, Description: {role.Description}");
+        }
 
         // bool resultNew = await managerGrant.GrantRoleAsync(accId,resultRole!.Id);
         // System.Console.WriteLine(resultNew);

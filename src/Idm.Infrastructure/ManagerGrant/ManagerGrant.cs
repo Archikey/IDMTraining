@@ -50,4 +50,30 @@ public class ManagerGrant(NpgsqlConnection npgsqlConnection) : IManagerGrant
 
         return exists;
     }
+
+    public async Task<bool> RevokeRoleAsync(int accountId, int roleId)
+    {
+        string sqlCommand = """
+        DELETE FROM accounts_roles
+        WHERE accounts_id = @accountId
+        AND roles_id = @roleId;
+        """;
+
+        await _connection.ExecuteAsync(sqlCommand, new { accountId, roleId });
+
+        string selectRow = """
+            SELECT EXISTS (
+            SELECT 1
+            FROM accounts_roles
+            WHERE accounts_id = @accountId
+            AND roles_id = @roleId
+            );
+        """;
+
+        bool exists = await _connection.ExecuteScalarAsync<bool>(
+            selectRow,
+            new { accountId, roleId });
+
+        return !exists;
+    }
 }

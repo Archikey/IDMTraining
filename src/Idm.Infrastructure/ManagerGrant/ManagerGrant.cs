@@ -14,6 +14,7 @@ public class ManagerGrant(NpgsqlConnection npgsqlConnection) : IManagerGrant
     private readonly NpgsqlConnection _connection = npgsqlConnection;
 
 
+
     public async Task<bool> GrantRoleAsync(int accountId, int roleId)
     {
 
@@ -76,4 +77,25 @@ public class ManagerGrant(NpgsqlConnection npgsqlConnection) : IManagerGrant
 
         return !exists;
     }
+    public async Task<List<Role>> GetAccountRolesAsync(int accountId)
+    {
+        string sqlCommand = """
+        SELECT
+         r.id AS Id,
+         r.name_role AS NameRole,
+         r.description AS Description,
+         r.created_at AS CreatedAt,
+         r.system_id AS SystemId
+        FROM roles AS r
+        JOIN accounts_roles AS ar ON r.id = ar.roles_id
+        WHERE ar.accounts_id = @accountId;
+        """;
+
+        var roles = await _connection.QueryAsync<Role>(
+    sqlCommand,
+    new { accountId });
+
+        return roles.ToList();
+    }
+
 }

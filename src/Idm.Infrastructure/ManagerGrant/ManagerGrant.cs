@@ -98,4 +98,27 @@ public class ManagerGrant(NpgsqlConnection npgsqlConnection) : IManagerGrant
         return roles.ToList();
     }
 
+    public async Task<List<Account>> GetRoleAccountsAsync(int roleId)
+    {
+        var sqlCommand = """
+        SELECT
+         a.id AS Id,
+         a.login_account AS Login,
+         a.display_name AS DisplayName,
+         a.account_type AS AccountType,
+         a.is_active AS IsActive,
+         a.system_id AS SystemId,
+         a.created_at AS CreatedAt,
+         a.updated_at AS UpdatedAt
+        FROM accounts AS a
+        JOIN accounts_roles AS ar ON a.id = ar.accounts_id
+        WHERE ar.roles_id = @roleId;
+        """;
+
+        var accounts = await _connection.QueryAsync<Account>(
+            sqlCommand,
+            new { roleId });
+
+        return accounts.ToList();
+    }
 }

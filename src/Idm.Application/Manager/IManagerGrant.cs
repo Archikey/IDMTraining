@@ -8,4 +8,5 @@ public interface IManagerGrant
     public Task<bool> RevokeRoleAsync(int accountId, int roleId);
 
     public Task<List<Role>> GetAccountRolesAsync(int accountId);
+    public Task<List<Account>> GetRoleAccountsAsync(int roleId);
 }

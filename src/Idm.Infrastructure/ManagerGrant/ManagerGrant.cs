@@ -121,4 +121,35 @@ public class ManagerGrant(NpgsqlConnection npgsqlConnection) : IManagerGrant
 
         return accounts.ToList();
     }
+
+    public async Task<bool> HasRoleAsync(int accountId, int roleId)
+    {
+        var sqlCommand = """
+        SELECT EXISTS (
+            SELECT 1
+            FROM accounts_roles
+            WHERE accounts_id = @accountId
+            AND roles_id = @roleId
+        );
+        """;
+
+        return await _connection.ExecuteScalarAsync<bool>(
+            sqlCommand,
+            new { accountId, roleId });
+    }
+
+    public async Task<int> GetAccountRoleCountAsync(int accountId)
+    {
+        var sqlCommand = """
+        SELECT COUNT(*)
+        FROM accounts_roles
+        WHERE accounts_id = @accountId;
+        """;
+
+        var count = await _connection.ExecuteScalarAsync<long>(
+            sqlCommand,
+            new { accountId });
+
+        return checked((int)count);
+    }
 }

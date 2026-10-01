@@ -9,4 +9,6 @@ public interface IManagerGrant
 
     public Task<List<Role>> GetAccountRolesAsync(int accountId);
     public Task<List<Account>> GetRoleAccountsAsync(int roleId);
+    public Task<bool> HasRoleAsync(int accountId, int roleId);
+    public Task<int> GetAccountRoleCountAsync(int accountId);
 }

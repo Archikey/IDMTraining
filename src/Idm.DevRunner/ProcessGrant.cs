@@ -86,13 +86,19 @@ public class ProcessGrant
         //     System.Console.WriteLine($"Role ID: {role.Id}, Name: {role.NameRole}, Description: {role.Description}");
         // }
 
-        var accounts = await managerGrant.GetRoleAccountsAsync(6);
-        foreach (var account in accounts)
-        {
-            System.Console.WriteLine($"Account ID: {account.Id}, Login: {account.Login}, Display Name: {account.DisplayName}, Account Type: {account.AccountType}, Is Active: {account.IsActive}");
-        }
+        // var accounts = await managerGrant.GetRoleAccountsAsync(6);
+        // foreach (var account in accounts)
+        // {
+        //     System.Console.WriteLine($"Account ID: {account.Id}, Login: {account.Login}, Display Name: {account.DisplayName}, Account Type: {account.AccountType}, Is Active: {account.IsActive}");
+        // }
+        
         // bool resultNew = await managerGrant.GrantRoleAsync(accId,resultRole!.Id);
         // System.Console.WriteLine(resultNew);
 
+        var resultHasRole = await managerGrant.HasRoleAsync(14, 6);
+        System.Console.WriteLine($"Account 14 has role 6: {resultHasRole}");
+        var roleCount = await managerGrant.GetAccountRoleCountAsync(14);
+        System.Console.WriteLine($"Account 14 has {roleCount} roles.");
+        
     }
 }

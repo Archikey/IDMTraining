@@ -214,4 +214,17 @@ public class ManagerAccount(NpgsqlConnection npgsqlConnection) : IManagerAccount
 
         return result > 0;
     }
+
+    public async Task<bool> SetAccountActiveAsync(int accountId, bool isActive)
+    {
+        string sqlCommand = """
+        UPDATE accounts
+        SET is_active = @isActive, updated_at = NOW()
+        WHERE id = @accountId;
+        """;
+
+        var result = await _connection.ExecuteAsync(sqlCommand, new { accountId, isActive });
+
+        return result > 0;
+    }
 }

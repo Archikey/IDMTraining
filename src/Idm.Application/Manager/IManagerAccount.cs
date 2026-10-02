@@ -16,5 +16,7 @@ namespace Idm.Application.Manager;
 
         public Task<bool> DeleteAccountAsync(int id);
 
+        public Task<bool> SetAccountActiveAsync(int accountId, bool isActive);
+
 
     }

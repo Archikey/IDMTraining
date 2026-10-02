@@ -32,7 +32,7 @@ public class ProcessAccount
 
         var account = new Account
         {
-            Login = "Archikey",
+            Login = "Archikey33",
             DisplayName = "Archikey",
             AccountType = AccountType.Privileged,
             IsActive = true,
@@ -48,7 +48,7 @@ public class ProcessAccount
         catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
         {
             Console.WriteLine("An account like that already exists.");
-            checkAccount = await accountManage.FindAccountByIdAsync(2);
+            checkAccount = await accountManage.FindAccountByIdAsync(14);
         }
 
         if (checkAccount is not null)
@@ -98,33 +98,33 @@ public class ProcessAccount
         // }
 
 
-        string sqlCreateRole = """
-INSERT INTO roles (name_role, system_id)
-VALUES (@nameRole, @systemId)
-RETURNING
-id;
-""";
+        //         string sqlCreateRole = """
+        // INSERT INTO roles (name_role, system_id)
+        // VALUES (@nameRole, @systemId)
+        // RETURNING
+        // id;
+        // """;
 
-        string sqlRoleInsert = """
-INSERT INTO accounts_roles (accounts_id, roles_id)
-VALUES (@accountId, @roleId);
-""";
+        //         string sqlRoleInsert = """
+        // INSERT INTO accounts_roles (accounts_id, roles_id)
+        // VALUES (@accountId, @roleId);
+        // """;
 
-        var roleId = await connection.ExecuteScalarAsync<int>(
-            sqlCreateRole,
-            new
-            {
-                nameRole = "Admin",
-                systemId
-            });
+        //         var roleId = await connection.ExecuteScalarAsync<int>(
+        //             sqlCreateRole,
+        //             new
+        //             {
+        //                 nameRole = "Admin",
+        //                 systemId
+        //             });
 
-        await connection.ExecuteAsync(sqlRoleInsert,
-        new
-        {
-            accountId = checkAccount.Id,
-            roleId
-        }
-        );
+        //         await connection.ExecuteAsync(sqlRoleInsert,
+        //         new
+        //         {
+        //             accountId = checkAccount.Id,
+        //             roleId
+        //         }
+        //         );
 
         string sqlSelect = """
 SELECT COUNT(*)
@@ -139,6 +139,13 @@ WHERE accounts_id = @accountId;
         );
 
         System.Console.WriteLine($"result: {resultSelect}");
+
+        var result2 = await accountManage.SetAccountActiveAsync(checkAccount.Id, false);
+        var account23 = await accountManage.FindAccountByIdAsync(checkAccount.Id);
+
+        Console.WriteLine($"Update result: {result2}");
+        Console.WriteLine($"IsActive: {account23?.IsActive}");
+        Console.WriteLine($"UpdatedAt: {account23?.UpdatedAt}");
 
         bool isDeleted = await accountManage.DeleteAccountAsync(checkAccount.Id);
         bool isDeleted2 = await accountManage.DeleteAccountAsync(checkAccount.Id);
